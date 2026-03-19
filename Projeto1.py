@@ -23,20 +23,20 @@ total_investido = capital + (aporte * meses)
 
 #CDB
 taxa_cdb = cdi_mensal * perc_cdb
-montante_cdb = capital * math.pow((1 + taxa_cdb), meses)
+montante_cdb = (capital * math.pow((1+taxa_cdb), meses) + (aporte * meses))
 lucro_dbc = montante_cdb - total_investido
 montante_cdb_liquido = total_investido + (lucro_dbc * 0.85)
 
 #LCI
 taxa_lci = cdi_mensal * perc_lci
-montante_lci = (capital * math.pow((1 + taxa_lci), meses))
+montante_lci = (capital * math.pow((1 + taxa_lci), meses) + (aporte * meses))
 
 #POUPANÇA
 taxa_poupança = 0.005
-montante_poupança = capital * math.pow((1 + taxa_poupança), meses)
+montante_poupança = (capital * math.pow((1 + taxa_poupança), meses) + (aporte * meses))
 
 #FII - SIMULAÇÕES
-montante_fii = capital * math.pow((1 + taxa_fii), meses)
+montante_fii = (capital * math.pow((1 + taxa_fii), meses) + (aporte * meses))
 
 variação1 = montante_fii * (1 + random.uniform(-0.03, 0.03))
 variação2 = montante_fii * (1 + random.uniform(-0.03, 0.03))
@@ -52,6 +52,7 @@ desvio_fii = stats.stdev(variacoes)
 #Prazo de resgate
 agora = datetime.datetime.now().date()
 resgate = agora + datetime.timedelta(days = meses * 30)
+meta_atingida = {True: True, False: False}[media_fii >= meta]
 
 print(f"""
 {'='*40}
@@ -80,5 +81,5 @@ FII (média): {locale.currency(media_fii, grouping=True)}
 Mediana: {locale.currency(mediana_fii, grouping=True)}
 Desvio padrão: {locale.currency(desvio_fii, grouping=True)}
 
-Meta atingida? {''}
+Meta atingida? {meta_atingida}
 """)
